@@ -1,53 +1,29 @@
-#include ".\Vector.h"
-
-#define TYPE_USED u8
+#if defined(__linux__)
+    #include "/home/codeleaded/System/Static/Container/Vector.h"
+#elif defined(_WINE)
+    #include "/home/codeleaded/System/Static/Container/Vector.h"
+#elif defined(_WIN32)
+    #include "F:/home/codeleaded/System/Static/Container/Vector.h"
+#elif defined(__APPLE__)
+    #error "Apple not supported!"
+#else
+    #error "Platform not supported!"
+#endif
 
 int main(int argc,char **argv){
-    printf("Start:\n");
+    Vector v = Vector_New(sizeof(int));
 
-    Vector v = NewVector(sizeof(TYPE_USED));
+    Vector_Push(&v,(int[]){ 0 });
+    Vector_PushCount(&v,(int[]){ 1,2,3,4,5,6,7,8,9,10 },10);
 
-    PrintVector(&v);
+    Vector_PopTop(&v);
+    Vector_Remove(&v,0);
+    Vector_RemoveCount(&v,1,3);
 
-    for(int i = 0;i<31;i++){
-        PushOfVector(&v,(void*)calloc(1,v.ELEMENT_SIZE));
-        TYPE_USED *ptr = (TYPE_USED*)(v.Memory[i]);
-        *ptr = (TYPE_USED)i;
-    }
-    /*printf("1------------------------------------------\n");
-    int Elements = 15;
-    for(int i = Elements;i>0;i--){
-        printf("Pop Element: %i\n",v.size);
-        PopTopOfVector(&v);
-    }
-    printf("2------------------------------------------\n");
-    Elements = 6;
-    for(int i = 0;i<Elements;i++){
-        AddOfVector(&v,(void*)calloc(1,v.ELEMENT_SIZE));
-    }
-    printf("3------------------------------------------\n");*/
-    for(int i = 0;i<2;i++){
-        //RemoveOfVector(&v,(u32)5);
-        //PrintVector(&v);
-    }
-    for(int i = 0;i<2;i++){
-        AddOfVector(&v,(void*)calloc(1,v.ELEMENT_SIZE),2);
-        PrintVector(&v);
-    }
-    printf("4------------------------------------------\n");
-    //ClearOfVector(&v);
+    Vector_Print(&v);
 
-    /*for(int i = 0;i<v.size;i++){
-        TYPE_USED *ptr = (TYPE_USED*)v.Memory[i];
-        *ptr = (TYPE_USED)100;
-    }
-    for(int i = 0;i<v.size;i++){
-        TYPE_USED *ptr = (TYPE_USED*)v.Memory[i];
-        printf("Element At %i: %i\n",i,(int)(*ptr));
-    }*/
+    Vector_Clear(&v);
 
-    PrintVector(&v);
-    FreeVector(&v);
-
+    Vector_Free(&v);
     return 0;
 }
